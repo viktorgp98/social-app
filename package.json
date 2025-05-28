@@ -11,7 +11,7 @@
     "lint": "expo lint"
   },
   "dependencies": {
-    "@clerk/clerk-expo": "^2.11.6",
+    "@clerk/clerk-expo": "^2.11.9",
     "@clerk/types": "^4.59.0",
     "@expo/vector-icons": "^14.1.0",
     "@react-navigation/bottom-tabs": "^7.3.10",
