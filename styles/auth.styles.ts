@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
   },
   brandSection: {
     alignItems: "center",
-    marginTop: height * 0.12,
+    marginTop: height * 0.10,
   },
   logoContainer: {
     width: 60,
@@ -30,7 +30,7 @@ export const styles = StyleSheet.create({
     marginBottom: 8,
   },
   tagline: {
-    fontSize: 16,
+    fontSize: 18,
     color: COLORS.grey,
     letterSpacing: 1,
     textTransform: "lowercase",
