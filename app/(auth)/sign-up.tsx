@@ -95,6 +95,7 @@ export default function SignUpScreen() {
               placeholder="Enter your verification code"
               onChangeText={(code) => setCode(code)}
               className="mt-8"
+              keyboardType="numeric"
             />
           </View>
           <TouchableOpacity
