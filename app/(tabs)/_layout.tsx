@@ -1,53 +1,68 @@
-import { COLORS } from '@/constants/theme'
-import { Ionicons } from '@expo/vector-icons'
-import { Tabs } from 'expo-router'
-import React from 'react'
+import { COLORS } from "@/constants/theme";
+import { Ionicons } from "@expo/vector-icons";
+import { Tabs } from "expo-router";
+import React from "react";
 
 const TabLayout = () => {
   return (
-    <Tabs 
-    screenOptions={{
+    <Tabs
+      screenOptions={{
         tabBarShowLabel: false,
         headerShown: false,
-        tabBarActiveTintColor:COLORS.primary,
-        tabBarInactiveTintColor:COLORS.grey,
-        tabBarStyle:{
-            position:'absolute',
-            backgroundColor:'black',
-            borderTopWidth:0,
-            elevation:0,
-            height:40,
-            paddingBottom:8,
-        }
-    }}
+        tabBarActiveTintColor: COLORS.primary,
+        tabBarInactiveTintColor: COLORS.grey,
+        tabBarStyle: {
+          position: "absolute",
+          backgroundColor: "black",
+          borderTopWidth: 0,
+          elevation: 0,
+          height: 40,
+          paddingBottom: 8,
+        },
+      }}
     >
-        <Tabs.Screen name='index' 
+      <Tabs.Screen
+        name="index"
         options={{
-            tabBarIcon:({size,color})=><Ionicons name='home' size={size} color={color}/>
+          tabBarIcon: ({ size, color }) => (
+            <Ionicons name="home" size={size} color={color} />
+          ),
         }}
-        />
-        <Tabs.Screen name='bookmarks'
+      />
+      <Tabs.Screen
+        name="bookmarks"
         options={{
-            tabBarIcon:({size,color})=><Ionicons name='bookmark' size={size} color={color}/>
+          tabBarIcon: ({ size, color }) => (
+            <Ionicons name="bookmark" size={size} color={color} />
+          ),
         }}
-        />
-        <Tabs.Screen name='create'
+      />
+      <Tabs.Screen
+        name="create"
         options={{
-            tabBarIcon:({size})=><Ionicons name='add-circle' size={size} color={COLORS.primary}/>
+          tabBarIcon: ({ size }) => (
+            <Ionicons name="add-circle" size={size} color={COLORS.primary} />
+          ),
         }}
-        />
-        <Tabs.Screen name='notifications'
+      />
+      <Tabs.Screen
+        name="notifications"
         options={{
-            tabBarIcon:({size,color})=><Ionicons name='heart' size={size} color={color}/>
+          tabBarIcon: ({ size, color }) => (
+            <Ionicons name="heart" size={size} color={color} />
+          ),
         }}
-        />
-        <Tabs.Screen name='profile'
+      />
+      <Tabs.Screen
+        name="profile"
         options={{
-            tabBarIcon:({size,color})=><Ionicons name='person-circle' size={size} color={color}/>
+          tabBarIcon: ({ size, color }) => (
+            <Ionicons name="person-circle" size={size} color={color} />
+          ),
         }}
-        />
+      />
     </Tabs>
-  )
-}
+  );
+};
 
-export default TabLayout
+export default TabLayout;
