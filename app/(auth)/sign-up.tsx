@@ -82,7 +82,9 @@ export default function SignUpScreen() {
           style={styles.container}
           className="items-start align-middle p-2 pt-20 mx-auto w-auto"
         >
-          <Text className="font-bold text-4xl">Verify{"\n"} your email</Text>
+          <Text className="font-bold text-white text-4xl">
+            Verify{"\n"} your email
+          </Text>
           <View
             style={{
               borderBottomWidth: 2,
@@ -93,6 +95,7 @@ export default function SignUpScreen() {
             <TextInput
               value={code}
               placeholder="Enter your verification code"
+              placeholderTextColor={"white"}
               onChangeText={(code) => setCode(code)}
               className="mt-8"
               keyboardType="numeric"
@@ -112,12 +115,9 @@ export default function SignUpScreen() {
   }
 
   return (
-    <View
-      style={styles.container}
-      className="items-start align-middle p-2 pt-10 mx-auto w-auto"
-    >
+    <View style={styles.container} className="items-center pt-10">
       <>
-        <Text className="w-auto text-left font-bold text-4xl text-wrap pt-20 mb-8">
+        <Text className="text-start font-bold text-4xl text-white pt-20 mb-20">
           Create{"\n"} your account
         </Text>
         <View
@@ -131,7 +131,9 @@ export default function SignUpScreen() {
             autoCapitalize="none"
             value={username}
             placeholder="Create an username"
+            placeholderTextColor={"white"}
             onChangeText={(username) => setUsername(username)}
+            className="text-white"
           />
         </View>
         <View
@@ -145,8 +147,10 @@ export default function SignUpScreen() {
             autoCapitalize="none"
             value={emailAddress}
             placeholder="Enter email"
+            placeholderTextColor={"white"}
             inputMode="email"
             onChangeText={(email) => setEmailAddress(email)}
+            className="text-white"
           />
         </View>
         <View
@@ -159,8 +163,10 @@ export default function SignUpScreen() {
           <TextInput
             value={password}
             placeholder="Enter password"
+            placeholderTextColor={"white"}
             secureTextEntry={true}
             onChangeText={(password) => setPassword(password)}
+            className="text-white"
           />
         </View>
         {/* Error message*/}
@@ -175,9 +181,9 @@ export default function SignUpScreen() {
           style={{ display: "flex", flexDirection: "row", gap: 3 }}
           className="mt-5"
         >
-          <Text>Already have an account?</Text>
+          <Text className="text-white">Already have an account?</Text>
           <Link href="/sign-in">
-            <Text className="font-bold text-md">Sign in</Text>
+            <Text className="font-bold text-md text-white">Sign in</Text>
           </Link>
         </View>
       </>

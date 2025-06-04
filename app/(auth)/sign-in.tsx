@@ -2,8 +2,15 @@ import { COLORS } from "@/constants/theme";
 import { styles } from "@/styles/auth.styles";
 import { useSignIn } from "@clerk/clerk-expo";
 import { Link, useRouter } from "expo-router";
-import React from "react";
-import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
+import React, { useRef } from "react";
+import {
+  Image,
+  Keyboard,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function Page() {
   const { signIn, setActive, isLoaded } = useSignIn();
@@ -47,6 +54,19 @@ export default function Page() {
     }
   };
 
+  //Handle the text input changes
+  const refPasswordInput = useRef<TextInput>(null);
+
+  const focusOnPassword = () => {
+    if (refPasswordInput && refPasswordInput.current) {
+      refPasswordInput.current.focus();
+    }
+  };
+
+  const hideKeyboard = () => {
+    Keyboard.dismiss();
+  };
+
   return (
     <View style={styles.container} className="p-2">
       {/* Brand section*/}
@@ -73,9 +93,11 @@ export default function Page() {
             inputMode="email"
             value={emailAddress}
             placeholder="Enter email"
-            placeholderTextColor={COLORS.background}
+            placeholderTextColor={"white"}
             onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
-            className="text-center"
+            className="text-center text-white"
+            returnKeyType="next"
+            onSubmitEditing={focusOnPassword}
           />
         </View>
         <View
@@ -83,15 +105,18 @@ export default function Page() {
             borderBottomWidth: 2,
             borderColor: error ? COLORS.error : COLORS.primary,
           }}
-          className="mb-8 w-60 "
+          className="mb-8 w-60"
         >
           <TextInput
             value={password}
             placeholder="Enter password"
-            placeholderTextColor={COLORS.background}
+            placeholderTextColor={"white"}
             secureTextEntry={true}
             onChangeText={(password) => setPassword(password)}
-            className="text-center"
+            className="text-center text-white"
+            ref={refPasswordInput}
+            returnKeyType="done"
+            onSubmitEditing={hideKeyboard}
           />
         </View>
         {/* Error message */}
@@ -106,11 +131,11 @@ export default function Page() {
         </TouchableOpacity>
         <View
           style={{ display: "flex", flexDirection: "row", gap: 5 }}
-          className="mt-5"
+          className="mt-5 "
         >
-          <Text>Don't have an account yet?</Text>
+          <Text className="text-white">Don't have an account yet?</Text>
           <Link href="/sign-up">
-            <Text className="font-bold text-md">Sign Up</Text>
+            <Text className="font-bold text-md text-white">Sign Up</Text>
           </Link>
         </View>
       </View>
