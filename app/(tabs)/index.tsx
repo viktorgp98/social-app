@@ -8,6 +8,7 @@ import { styles } from "@/styles/feed.styles";
 import { useAuth } from "@clerk/clerk-expo";
 import { Ionicons } from "@expo/vector-icons";
 import { useQuery } from "convex/react";
+import * as Linking from "expo-linking";
 import {
   FlatList,
   ScrollView,
@@ -18,6 +19,15 @@ import {
 
 const Index = () => {
   const { signOut } = useAuth();
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      // Redirect to your desired page
+      Linking.openURL(Linking.createURL("/(auth)/sign-in"));
+    } catch (err) {
+      console.error(JSON.stringify(err, null, 2));
+    }
+  };
   const posts = useQuery(api.posts.getFeedPosts);
 
   if (posts === undefined) return <Loader />;
@@ -28,7 +38,7 @@ const Index = () => {
       {/* HEADER */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>HackerStuff</Text>
-        <TouchableOpacity onPress={() => signOut()}>
+        <TouchableOpacity onPress={() => handleSignOut()}>
           <Ionicons name="log-out-outline" size={24} color={COLORS.white} />
         </TouchableOpacity>
       </View>
