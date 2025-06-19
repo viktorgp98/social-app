@@ -80,7 +80,7 @@ export default function SignUpScreen() {
       <>
         <View
           style={styles.container}
-          className="items-start align-middle p-2 pt-20 mx-auto w-auto"
+          className="items-center align-middle p-2 pt-20 mx-auto w-full"
         >
           <Text className="font-bold text-white text-4xl">
             Verify{"\n"} your email
@@ -97,7 +97,7 @@ export default function SignUpScreen() {
               placeholder="Enter your verification code"
               placeholderTextColor={"white"}
               onChangeText={(code) => setCode(code)}
-              className="mt-8"
+              className="mt-8 text-white"
               keyboardType="numeric"
             />
           </View>

@@ -20,7 +20,7 @@ export const styles = StyleSheet.create({
     color: COLORS.primary,
     fontSize: 23,
     fontFamily: "JetBrainsMono-Medium",
-    fontWeight: "800",
+    /* fontWeight: "800", */
   },
   storiesContainer: {
     paddingVertical: 12,

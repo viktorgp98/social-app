@@ -1,9 +1,12 @@
 import { COLORS } from "@/constants/theme";
+import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { styles } from "@/styles/feed.styles";
 import { Ionicons } from "@expo/vector-icons";
+import { useMutation } from "convex/react";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
+import { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
 type PostProps = {
@@ -25,6 +28,19 @@ type PostProps = {
 };
 
 const Post = ({ post }: PostProps) => {
+  const [isLiked, setIsLiked] = useState(post.isLiked);
+  const [likesCount, setLikesCount] = useState(post.likes);
+  const toggleLike = useMutation(api.posts.toggleLike);
+
+  const handleLike = async () => {
+    try {
+      const newIsLiked = await toggleLike({ postId: post._id });
+      setIsLiked(newIsLiked);
+      setLikesCount((prev) => (newIsLiked ? prev + 1 : prev - 1));
+    } catch (error) {
+      console.error("Error toggling like:", error);
+    }
+  };
   return (
     <View style={styles.post}>
       {/* POST HEADER */}
@@ -60,8 +76,12 @@ const Post = ({ post }: PostProps) => {
       {/* POST ACTIONS */}
       <View style={styles.postActions}>
         <View style={styles.postActionsLeft}>
-          <TouchableOpacity>
-            <Ionicons name="heart-outline" size={24} color={COLORS.white} />
+          <TouchableOpacity onPress={handleLike}>
+            <Ionicons
+              name={isLiked ? "heart" : "heart-outline"}
+              size={24}
+              color={isLiked ? COLORS.primary : COLORS.white}
+            />
           </TouchableOpacity>
           <TouchableOpacity>
             <Ionicons
@@ -77,7 +97,11 @@ const Post = ({ post }: PostProps) => {
       </View>
       {/*POST INFO*/}
       <View style={styles.postInfo}>
-        <Text style={styles.likesText}>Be the first to like</Text>
+        <Text style={styles.likesText}>
+          {likesCount > 0
+            ? `${likesCount.toLocaleString()} likes`
+            : "Be the first to like"}
+        </Text>
         {post.caption && (
           <View style={styles.captionContainer}>
             <Text style={styles.captionUsername}>{post.author.username}</Text>
