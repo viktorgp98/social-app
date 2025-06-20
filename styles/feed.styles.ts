@@ -89,13 +89,13 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingHorizontal: 12,
-    paddingVertical: 12,
+    paddingHorizontal: 8,
+    paddingVertical: 8,
   },
   postActionsLeft: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 16,
+    padding: 5,
     gap: 10,
   },
   postInfo: {
