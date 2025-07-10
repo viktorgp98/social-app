@@ -1,10 +1,11 @@
 import { SignOutButton } from "@/components/SignOutButton";
 import { SignedIn, useUser } from "@clerk/clerk-expo";
-import React from "react";
+import React, { useState } from "react";
 import { Text, View } from "react-native";
 
 const Profile = () => {
   const { user } = useUser();
+  const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   return (
     <View className="flex-1 items-center align-middle mt-20">
       <Text className="text-4xl font-bold mb-10">Profile</Text>
