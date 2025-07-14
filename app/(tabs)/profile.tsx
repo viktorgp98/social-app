@@ -1,11 +1,14 @@
 import Loader from "@/components/Loader";
+import { COLORS } from "@/constants/theme";
 import { api } from "@/convex/_generated/api";
 import { Doc } from "@/convex/_generated/dataModel";
 import { styles } from "@/styles/profile.styles";
 import { useAuth } from "@clerk/clerk-expo";
+import { Ionicons } from "@expo/vector-icons";
 import { useMutation, useQuery } from "convex/react";
+import { Image } from "expo-image";
 import React, { useState } from "react";
-import { Text, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 const Profile = () => {
   /* new */
@@ -42,7 +45,48 @@ const Profile = () => {
 
   return (
     <View style={styles.container}>
-      <Text>Profile screen</Text>
+      {/* HEADER */}
+      <View style={styles.header}>
+        <View style={styles.headerLeft}>
+          <Text style={styles.username}>{currentUser.username}</Text>
+        </View>
+        <View style={styles.headerRight}>
+          <TouchableOpacity style={styles.headerIcon} onPress={() => signOut()}>
+            <Ionicons name="log-out-outline" size={24} color={COLORS.white} />
+          </TouchableOpacity>
+        </View>
+      </View>
+      {/* PROFILE INFO */}
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.profileInfo}>
+          {/* AVATAR */}
+          <View style={styles.avatarAndStats}>
+            <View style={styles.avatarContainer}>
+              <Image
+                source={currentUser.image}
+                style={styles.avatar}
+                contentFit="cover"
+                transition={200}
+              />
+            </View>
+            {/* Stats */}
+            <View style={styles.statsContainer}>
+              <View style={styles.statItem}>
+                <Text style={styles.statNumber}>{currentUser.posts}</Text>
+                <Text style={styles.statLabel}>Posts</Text>
+              </View>
+              <View style={styles.statItem}>
+                <Text style={styles.statNumber}>{currentUser.followers}</Text>
+                <Text style={styles.statLabel}>Followers</Text>
+              </View>
+              <View style={styles.statItem}>
+                <Text style={styles.statNumber}>{currentUser.following}</Text>
+                <Text style={styles.statLabel}>Following</Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      </ScrollView>
     </View>
   );
 };
