@@ -87,7 +87,7 @@ export const styles = StyleSheet.create({
   },
   editButton: {
     flex: 1,
-    backgroundColor: COLORS.surface,
+    backgroundColor: COLORS.surfaceLight,
     padding: 8,
     borderRadius: 8,
     alignItems: "center",
@@ -98,7 +98,7 @@ export const styles = StyleSheet.create({
     fontSize: 14,
   },
   shareButton: {
-    backgroundColor: COLORS.surface,
+    backgroundColor: COLORS.surfaceLight,
     padding: 8,
     borderRadius: 8,
     aspectRatio: 1,
@@ -145,7 +145,7 @@ export const styles = StyleSheet.create({
     fontSize: 14,
   },
   input: {
-    backgroundColor: COLORS.surface,
+    backgroundColor: COLORS.surfaceLight,
     borderRadius: 8,
     padding: 12,
     color: COLORS.white,
@@ -199,6 +199,12 @@ export const styles = StyleSheet.create({
     backgroundColor: COLORS.surface,
     borderWidth: 1,
     borderColor: COLORS.primary,
+  },
+  followButtonText: {
+    color: COLORS.white,
+    fontSize: 14,
+    fontWeight: "600",
+    textAlign: "center",
   },
   followingButtonText: {
     color: COLORS.white,

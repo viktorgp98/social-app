@@ -7,8 +7,21 @@ import { useAuth } from "@clerk/clerk-expo";
 import { Ionicons } from "@expo/vector-icons";
 import { useMutation, useQuery } from "convex/react";
 import { Image } from "expo-image";
+import * as Linking from "expo-linking";
 import React, { useState } from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  Keyboard,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 
 const Profile = () => {
   /* new */
@@ -19,29 +32,28 @@ const Profile = () => {
     userId ? { clerkId: userId } : "skip"
   );
   const [editedProfile, setEditedProfile] = useState({
-    fullName: currentUser?.fullname || "",
+    fullname: currentUser?.fullname || "",
     bio: currentUser?.bio || "",
   });
 
   const [selectedPost, setSelectedPost] = useState<Doc<"posts"> | null>(null);
   const posts = useQuery(api.posts.getPostsByUser, {});
   const updateProfile = useMutation(api.users.updateProfile);
-  const handleSaveProfile = async () => {};
+  const handleSaveProfile = async () => {
+    await updateProfile(editedProfile);
+    setIsEditModalVisible(false);
+  };
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      // Redirect to your desired page
+      Linking.openURL(Linking.createURL("/(auth)/sign-in"));
+    } catch (err) {
+      console.error(JSON.stringify(err, null, 2));
+    }
+  };
 
   if (!currentUser || posts === undefined) return <Loader />;
-
-  /* return (
-    <View className="flex-1 items-center align-middle mt-20">
-      <Text className="text-4xl font-bold mb-10">Profile</Text>
-      <SignedIn>
-        <View className="text-[15px] flex-row gap-3">
-          <Text>Hello</Text>
-          <Text className="font-bold">{user?.username}</Text>
-        </View>
-        <SignOutButton />
-      </SignedIn>
-    </View>
-  ); */
 
   return (
     <View style={styles.container}>
@@ -51,7 +63,10 @@ const Profile = () => {
           <Text style={styles.username}>{currentUser.username}</Text>
         </View>
         <View style={styles.headerRight}>
-          <TouchableOpacity style={styles.headerIcon} onPress={() => signOut()}>
+          <TouchableOpacity
+            style={styles.headerIcon}
+            onPress={() => handleSignOut()}
+          >
             <Ionicons name="log-out-outline" size={24} color={COLORS.white} />
           </TouchableOpacity>
         </View>
@@ -85,8 +100,142 @@ const Profile = () => {
               </View>
             </View>
           </View>
+          {/* Name and bio */}
+          <Text style={styles.name}>{currentUser.fullname}</Text>
+          {currentUser.bio && <Text style={styles.bio}>{currentUser.bio}</Text>}
+          {/* Action buttons */}
+          <View style={styles.actionButtons}>
+            <TouchableOpacity
+              style={styles.editButton}
+              onPress={() => setIsEditModalVisible(true)}
+            >
+              <Text style={styles.editButtonText}>Edit Profile</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.shareButton}>
+              <Ionicons name="share-outline" size={20} color={COLORS.white} />
+            </TouchableOpacity>
+          </View>
         </View>
+
+        {posts.length === 0 && <NoPostsFound />}
+
+        {/* POSTS */}
+        <FlatList
+          data={posts}
+          numColumns={3}
+          scrollEnabled={false}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              style={styles.gridItem}
+              onPress={() => setSelectedPost(item)}
+            >
+              <Image
+                source={item.imageUrl}
+                style={styles.gridImage}
+                contentFit="cover"
+                transition={200}
+              />
+            </TouchableOpacity>
+          )}
+        />
       </ScrollView>
+
+      {/* EDIT PROFILE MODAL */}
+      <Modal
+        visible={isEditModalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setIsEditModalVisible(false)}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={styles.modalContainer}
+          >
+            <View style={styles.modalContent}>
+              <View style={styles.modalHeader}>
+                <Text style={styles.modalTitle}>Edit Profile</Text>
+                <TouchableOpacity onPress={() => setIsEditModalVisible(false)}>
+                  <Ionicons name="close" size={24} color={COLORS.white} />
+                </TouchableOpacity>
+              </View>
+              {/* FULLNAME */}
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputLabel}>Name</Text>
+                <TextInput
+                  style={styles.input}
+                  value={editedProfile.fullname}
+                  onChangeText={(text) =>
+                    setEditedProfile((prev) => ({ ...prev, fullname: text }))
+                  }
+                  placeholderTextColor={COLORS.grey}
+                />
+              </View>
+              {/* BIO */}
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputLabel}>Bio</Text>
+                <TextInput
+                  style={[styles.input, styles.input]}
+                  value={editedProfile.bio}
+                  onChangeText={(text) =>
+                    setEditedProfile((prev) => ({ ...prev, bio: text }))
+                  }
+                  multiline
+                  numberOfLines={5}
+                  placeholderTextColor={COLORS.grey}
+                />
+              </View>
+              {/* Save changes button */}
+              <TouchableOpacity
+                style={styles.saveButton}
+                onPress={handleSaveProfile}
+              >
+                <Text style={styles.saveButtonText}>Save Changes</Text>
+              </TouchableOpacity>
+            </View>
+          </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
+      </Modal>
+      {/* SELECTED IMAGE MODAL */}
+      <Modal
+        visible={!!selectedPost}
+        animationType="fade"
+        transparent={true}
+        onRequestClose={() => setSelectedPost(null)}
+      >
+        <View style={styles.modalBackdrop}>
+          {selectedPost && (
+            <View style={styles.postDetailContainer}>
+              <View style={styles.postDetailHeader}>
+                <TouchableOpacity onPress={() => setSelectedPost(null)}>
+                  <Ionicons name="close" size={24} color={COLORS.white} />
+                </TouchableOpacity>
+              </View>
+              <Image
+                source={selectedPost.imageUrl}
+                cachePolicy={"memory-disk"}
+                style={styles.postDetailImage}
+              />
+            </View>
+          )}
+        </View>
+      </Modal>
+    </View>
+  );
+};
+
+const NoPostsFound = () => {
+  return (
+    <View
+      style={{
+        height: "100%",
+        backgroundColor: COLORS.background,
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Ionicons name="images-outline" size={48} color={COLORS.primary} />
+      <Text style={{ fontSize: 20, color: COLORS.white }}>No posts yet</Text>
     </View>
   );
 };
