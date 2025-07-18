@@ -8,10 +8,18 @@ import { useAuth } from "@clerk/clerk-expo";
 import { Ionicons } from "@expo/vector-icons";
 import { useQuery } from "convex/react";
 import * as Linking from "expo-linking";
-import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
+import {
+  FlatList,
+  RefreshControl,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 const Index = () => {
   const { signOut } = useAuth();
+  const [refreshing, setRefreshing] = useState(false);
   const handleSignOut = async () => {
     try {
       await signOut();
@@ -25,6 +33,13 @@ const Index = () => {
 
   if (posts === undefined) return <Loader />;
   if (posts.length === 0) return <NoPostsFound />;
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  };
 
   return (
     <View style={styles.container}>
@@ -43,6 +58,13 @@ const Index = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 60 }}
         ListHeaderComponent={<Stories />}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor={COLORS.primary}
+          />
+        }
       />
     </View>
   );

@@ -215,6 +215,7 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     paddingVertical: 48,
     gap: 12,
+    flex: 1,
   },
   noPostsText: {
     color: COLORS.grey,

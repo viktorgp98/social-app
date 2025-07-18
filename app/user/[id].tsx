@@ -6,7 +6,7 @@ import { styles } from "@/styles/profile.styles";
 import { Ionicons } from "@expo/vector-icons";
 import { useMutation, useQuery } from "convex/react";
 import { Image } from "expo-image";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
 import {
   FlatList,
@@ -26,9 +26,13 @@ const UserProfileScreen = () => {
   const isFollowing = useQuery(api.users.isFollowing, {
     followingId: id as Id<"users">,
   });
+  const router = useRouter();
 
   const toggleFollow = useMutation(api.users.toggleFollow);
-  const handleBack = () => {};
+  const handleBack = () => {
+    if (router.canGoBack()) router.back();
+    else router.replace("/(tabs)");
+  };
   if (profile === undefined || posts === undefined || isFollowing === undefined)
     return <Loader />;
 
